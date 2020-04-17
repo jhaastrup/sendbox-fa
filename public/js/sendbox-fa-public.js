@@ -37,10 +37,12 @@
 			
 			e.preventDefault();
 			var sendbox_tracking_code = $("input[name='sendbox_track']").val();
+			//alert("fetching");
+			//jQuery.blockUI({message:'Fetching Tracking Details...'});
 			var data = {
 			  code: sendbox_tracking_code
 			}; 
-               console.log('am getting here');
+               //console.log(code);
 			   $.post(
 				sendbox_fa_ajax_object.sendbox_fa_ajax_url,
 				{
@@ -48,6 +50,10 @@
 				  data: data
 				},
 				function(response) {
+					//$('#tracking_details').append(JSON.stringify(response.agent))
+					$('#tracking_details').append(response)
+					document.getElementById("tracking_form").style.display = "none"
+					//$.unblockUI();
 				   
 				}
 			  );

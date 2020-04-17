@@ -98,6 +98,7 @@ class Sendbox_Fa_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/sendbox-fa-public.js', array( 'jquery' ), $this->version, false );
 		 
+		wp_enqueue_script('jquery-ui-dialog');
 		wp_localize_script(
 			$this->plugin_name,
 			'sendbox_fa_ajax_object',
@@ -132,10 +133,12 @@ class Sendbox_Fa_Public {
 			'post_content'  => 'Track your shipment
 			<br/>
 
-            <form method="post" action="">
+            <form method="post" action="" id="tracking_form">
 			<input type="text" name="sendbox_track" id="sendbox_track" placeholder="Enter your tracking code">
              <button id="sendbox_track_btn" type="submit">Track</button>
-            </form>
+			</form> 
+			
+			<div id="tracking_details"> <div>
 			',
 			'post_status'   => 'publish',
 			'post_author'   => 1,
@@ -160,10 +163,15 @@ class Sendbox_Fa_Public {
 
 	 function track_sendbox_shipment(){
 		if (isset($_POST['data'])) {
-			$tracking_code    = sanitize_text_field($data['sendbox_track']);
+			$s = $_POST['data'];
+			$d = $s['code'];
+			//var_dump($d);
+			$tracking_code =$d;
+			//$tracking_code    = sanitize_text_field($data['code']);
+			//var_dump($tracking_code);
 			$payload_data = new stdClass();
 			$payload_data->code      = $tracking_code; 
-
+               
 			$sendbox_obj = new Sendbox_API();
 			$url = $sendbox_obj->get_sendbox_api_url('tracking'); 
 	        $api_key = get_option('auth_token');
@@ -176,9 +184,87 @@ class Sendbox_Fa_Public {
 	
 	      $track_data = wp_json_encode($payload_data);
 	      $tracking_res = $sendbox_obj->post_on_api_by_curl($url,$track_data,$api_key);
-	      $tracking_obj = json_decode($tracking_res);
-	      var_dump($tracking_obj);
+		  $tracking_obj = json_decode($tracking_res);
 
+		  $courier_obj = $tracking_obj->courier;
+		  $courier = $courier_obj->name;
+		  $status_obj = $tracking_obj->status;
+		  $main_status = $status_obj->name;
+		  
+		  //$f = $tracking_obj->events;
+		  //var_dump($tracking_obj);
+		   //var_dump($courier_obj->name);
+		  // echo "Status:". ''.$tracking_obj->status_code .'<br/>'; 
+		   //echo " Origin:". ' '. $tracking_obj->short_origin_address;
+		   //echo " Destination:".' '.$tracking_obj->short_destination_address; 
+
+
+		   echo "<table>";
+
+		   echo "<tr>";
+		   echo "<td>Courier</td>";
+		   echo "<td>". $courier."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Status</td>";
+		   echo "<td>".$main_status."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Origin</td>";
+		   echo "<td>".$tracking_obj->short_origin_address."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Destination</td>";
+		   echo "<td>".$tracking_obj->short_destination_address."</td>";
+		   echo "</tr>"; 
+		   
+		   echo "</table>";
+
+		   $updates = $tracking_obj->events;
+           //var_dump($updates);
+		  /*  var_dump($updates[0]->status);
+		   var_dump($updates[0]->courier);
+		   var_dump($updates[0]->previous_status);
+		   var_dump($updates[0]->delivery_status);
+		   var_dump($updates[0]->last_updated);
+		   var_dump($updates[0]->description);
+		   var_dump($updates[0]->previous_status_code);
+		   var_dump($updates[0]->current_courier); */
+		  foreach ($updates as $update_id => $update_value){
+			$status_name = $update_value->status->name;
+			$courier_name = $update_value->courier->name;
+			$previous_status = $update_value->previous_status->name;
+			$delivery_status = $update_value->delivery_status->name;
+			$last_updated = $update_value->last_updated;
+			$description = $update_value->description;
+		   }  
+
+		   echo "<table>";
+
+		   echo "<tr>";
+		   echo "<td>Status</td>";
+		   echo "<td>". $status_name."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Courier</td>";
+		   echo "<td>". $courier_name."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Last Updated</td>";
+		   echo "<td>". $last_updated."</td>";
+		   echo "</tr>"; 
+
+		   echo "<tr>";
+		   echo "<td>Description</td>";
+		   echo "<td>". $description."</td>";
+		   echo "</tr>"; 
+
+		   echo "</table>";
 
 		}
 
