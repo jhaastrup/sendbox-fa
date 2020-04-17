@@ -41,19 +41,16 @@
 			  code: sendbox_tracking_code
 			}; 
                console.log('am getting here');
-			$.ajax({
-				
-				url: sendbox_fa_ajax_object.sendbox_fa_ajax_url,
-				type:"POST",
-				action: "track_sendbox_shipment",
-				data: data
-					  },
-					  
-			  function(response){
-				 
-				
-			  }
-			);
+			   $.post(
+				sendbox_fa_ajax_object.sendbox_fa_ajax_url,
+				{
+				  action: "track_sendbox_shipment",
+				  data: data
+				},
+				function(response) {
+				   
+				}
+			  );
 		  });
 	  
 		

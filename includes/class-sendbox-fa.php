@@ -180,7 +180,8 @@ class Sendbox_Fa {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action('wp_footer', $plugin_public, 'add_sendbox_page'); 
+		$this->loader->add_action('wp_footer', $plugin_public, 'add_sendbox_page');
+		$this->loader->add_action('wp_ajax_track_sendbox_shipment', $plugin_public, 'track_sendbox_shipment');
 		$this->loader->add_action('wp_ajax_nopriv_track_sendbox_shipment', $plugin_public, 'track_sendbox_shipment');
 		
 	
