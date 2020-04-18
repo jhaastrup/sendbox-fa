@@ -130,11 +130,11 @@ class Sendbox_Fa_Public {
 
 		$sendbox_page = array(
 			'post_title'    => 'Tracking',
-			'post_content'  => 'Track your shipment
+			'post_content'  => 'Track Your Parcel
 			<br/>
 
             <form method="post" action="" id="tracking_form">
-			<input type="text" name="sendbox_track" id="sendbox_track" placeholder="Enter your tracking code">
+			<input type="text" name="sendbox_track" id="sendbox_track" placeholder="Enter Your Tracking Code">
              <button id="sendbox_track_btn" type="submit">Track</button>
 			</form> 
 			

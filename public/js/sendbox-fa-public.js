@@ -38,6 +38,9 @@
 			e.preventDefault();
 			var sendbox_tracking_code = $("input[name='sendbox_track']").val();
 			//alert("fetching");
+			$("#tracking_details").html('<div> Fetching Tracking Updates ... <br/> This might take a little while</div>');
+			//track_shipment_btn.prop('disabled',true);
+			$("#sendbox_track_btn").prop('disabled', true);
 			//jQuery.blockUI({message:'Fetching Tracking Details...'});
 			var data = {
 			  code: sendbox_tracking_code
@@ -51,6 +54,7 @@
 				},
 				function(response) {
 					//$('#tracking_details').append(JSON.stringify(response.agent))
+					$("#tracking_details").html(' ');
 					$('#tracking_details').append(response)
 					document.getElementById("tracking_form").style.display = "none"
 					//$.unblockUI();

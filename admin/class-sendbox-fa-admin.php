@@ -188,7 +188,7 @@ class Sendbox_Fa_Admin {
 			$app_id = "5e4f996322a6b20724c9559e";
 			$client_secret = "9cd808e9c64fdod9920d78025972d6f18462d5104eeb20f5f62ae998e60bcbc8e602d31a8bc71139062e960322b884c3074fcb58477675b9e95727b5faf708f";
 			$sendbox_url = 'https://api.sendbox.co/oauth/access?app_id='.$app_id.'&scopes='.$scopes.'&redirect_url='.$static_url.'&state='.$state; 
-
+             //var_dump($sendbox_url);
 			$server_res = ($_SERVER);
 			$str = $server_res["REQUEST_URI"];
 			parse_str($str, $output);
